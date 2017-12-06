@@ -1,0 +1,22 @@
+version: '3'
+services:
+   peer1:
+      image: openjdk:7
+      volumes:
+         - ./peer1:/usr/src/myapp
+      working_dir: /usr/src/myapp
+      ports:
+         - 8080:8080
+      command:
+         - mvn package
+         - java -cp target/block-chain-1.0-SNAPSHOT.jar com.databasserne.block-chain
+   peer2:
+      image: openjdk:7
+      volumes:
+         - ./peer2:/usr/src/myapp
+      working_dir: /usr/src/myapp
+      ports:
+         - 8080:8080
+      command:
+         - mvn package
+         - java -cp target/block-chain-1.0-SNAPSHOT.jar com.databasserne.block-chain
