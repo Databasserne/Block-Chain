@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.JsonSyntaxException;
 import com.sun.org.apache.bcel.internal.generic.SWITCH;
 
 import java.io.*;
@@ -25,12 +26,23 @@ public class SocketHandler implements Runnable {
         System.out.println("Started");
         try {
             BufferedReader bf = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            while(true) {
-                JsonObject jsonObject = parser.parse(bf.readLine()).getAsJsonObject();
+            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+            String input;
+            while((input = bf.readLine()) != null) {
+                JsonObject jsonObject;
+                try{
+                    jsonObject = parser.parse(input).getAsJsonObject();
+                } catch(JsonSyntaxException e){
+                    continue;
+                } catch(IllegalStateException e){
+                    continue;
+                }
+                
                 String type = jsonObject.get("type").getAsString();
                 System.out.println("Type -> " + type);
 
                 if (type.equals("query_latest")) {
+                    //out.println("Her er min dimmer");
                     write(socket, "Her er min seneste");
 
                 } else if (type.equals("query_all")) {
@@ -52,8 +64,7 @@ public class SocketHandler implements Runnable {
     }
 
     public static void write(Socket socket, String message) throws IOException {
-        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
-        writer.write(message);
-        writer.close();
+         PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+         out.println(message);
     }
 }
