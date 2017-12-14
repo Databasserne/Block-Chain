@@ -2,10 +2,10 @@ package com.databasserne.controller;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonSyntaxException;
-import com.sun.org.apache.bcel.internal.generic.SWITCH;
 
 import java.io.*;
 import java.net.Socket;
@@ -42,9 +42,14 @@ public class SocketHandler implements Runnable {
                 System.out.println("Type -> " + type);
 
                 if (type.equals("query_latest")) {
-                    //out.println("Her er min dimmer");
-                    write(socket, "Her er min seneste");
-
+                    JsonArray data = new JsonArray();
+                    JsonObject block1 = new JsonObject();
+                    block1.addProperty("hash", "VI HAR EN HASH");
+                    data.add(block1);
+                    JsonObject obj = new JsonObject();
+                    obj.addProperty("type", "response_blockchain");
+                    obj.add("data", data);
+                    write(socket, gson.toJson(obj));
                 } else if (type.equals("query_all")) {
 
                 } else if (type.equals("response_blockchain")) {
