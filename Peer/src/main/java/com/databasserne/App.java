@@ -19,7 +19,13 @@ public class App
     }
 
     private void start() {
-        connectionController = new ConnectionController(1234);
-        connectionController.connect();
+        int port = 3001;
+        if(System.getenv("PEER_PORT") != null) {
+            port = Integer.parseInt(System.getenv("PEER_PORT"));
+        }
+        connectionController = new ConnectionController(port);
+        connectionController.serverStart();
+
+        while(true) {}
     }
 }
