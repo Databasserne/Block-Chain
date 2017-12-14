@@ -3,15 +3,14 @@ services:
    peer1:
       build: ./peer/
       ports:
-         - 8001:8001
+         - 6001:6001
       environment:
          - PEER_PORT=6001
          - HTTP_PORT=8001
    peer2:
       build: ./peer/
       ports:
-         - 8002:8002
+         - 6002:6002
       environment:
          - PEERS=peer1:6001
          - PEER_PORT=6002
-         - HTTP_PORT=8002

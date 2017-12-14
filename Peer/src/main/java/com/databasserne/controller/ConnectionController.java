@@ -1,6 +1,7 @@
 package com.databasserne.controller;
 
 import java.io.IOException;
+import java.net.ConnectException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -51,11 +52,14 @@ public class ConnectionController implements IConnection {
     public void connect(List<String> peers) {
         try {
             for (String peer : peers) {
-                String[] peerData = peer.split(":");
-                socket = new Socket(peerData[0], Integer.parseInt(peerData[1]));
-                SocketHandler socketHandler = new SocketHandler(self, socket);
-                serverClients.add(socketHandler);
-                new Thread(socketHandler).start();
+                try {
+                    String[] peerData = peer.split(":");
+                    socket = new Socket(peerData[0], Integer.parseInt(peerData[1]));
+                    SocketHandler socketHandler = new SocketHandler(self, socket);
+                    serverClients.add(socketHandler);
+                    new Thread(socketHandler).start();
+                } catch (ConnectException e) {
+                }
             }
 
         } catch (IOException e) {

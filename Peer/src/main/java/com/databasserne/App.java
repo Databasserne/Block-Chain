@@ -28,13 +28,19 @@ public class App
     private void start() throws Exception {
         blockchainController = new BlockchainController();
 
-        int port = 3002;
-        System.out.println(port);
+        int port = 3001;
         if(System.getenv("PEER_PORT") != null) {
             port = Integer.parseInt(System.getenv("PEER_PORT"));
         }
+        System.out.println(port);
         List<String> tmpArr = new ArrayList();
-        tmpArr.add("localhost:3001");
+        if(System.getenv("PEERS") != null) {
+            String[] peersEnv = System.getenv("PEERS").split(",");
+            for(String peerEnv : peersEnv) {
+                tmpArr.add(peerEnv);
+            }
+        }
+        //tmpArr.add("localhost:3001");
         connectionController = new ConnectionController(port);
         connectionController.connect(tmpArr);
         connectionController.serverStart();

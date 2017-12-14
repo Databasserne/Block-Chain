@@ -3,7 +3,9 @@ package com.databasserne.controller.security;
 import org.bouncycastle.jcajce.provider.digest.SHA3;
 import org.bouncycastle.util.encoders.Hex;
 
+import javax.xml.bind.DatatypeConverter;
 import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
 
 public class Sha3 {
 
@@ -11,7 +13,12 @@ public class Sha3 {
 
     public static String encode(String s) throws Exception {
         if(s == null || s.equals("")) throw new Exception("Bad Request");
-        SHA3.DigestSHA3 md = new SHA3.DigestSHA3(DEFAULT.getValue());
+
+        MessageDigest md = MessageDigest.getInstance("MD5");
+        md.update(s.getBytes());
+        return DatatypeConverter.printHexBinary(md.digest()).toUpperCase();
+
+        /*SHA3.DigestSHA3 md = new SHA3.DigestSHA3(DEFAULT.getValue());
 
         try {
             md.update(s.getBytes("UTF-8"));
@@ -20,7 +27,7 @@ public class Sha3 {
         }
 
         byte[] digest = md.digest();
-        return encodeToString(digest);
+        return encodeToString(digest);*/
     }
 
     private static String encodeToString(byte[] bytes) {
