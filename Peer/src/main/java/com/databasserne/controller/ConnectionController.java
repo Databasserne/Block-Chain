@@ -23,29 +23,35 @@ public class ConnectionController implements IConnection {
         this.serverClients = new ArrayList<SocketHandler>();
     }
 
-    public void serverStart() {
-        try {
-            serverSocket = new ServerSocket(serverPort);
-            new Thread(new Runnable() {
-                public void run() {
+    public int serverStart() {
+        while(true) {
+            try {
+                serverSocket = new ServerSocket(serverPort);
+                new Thread(new Runnable() {
+                    public void run() {
 
-                    while(true) {
-                        try {
-                            System.out.println("Waiting");
-                            Socket newSocket = serverSocket.accept();
-                            SocketHandler socketHandler = new SocketHandler(self, newSocket);
-                            serverClients.add(socketHandler);
-                            new Thread(socketHandler).start();
-                            System.out.println("We have liftoff");
-                        } catch (IOException e) {
-                            e.printStackTrace();
+                        while (true) {
+                            try {
+                                System.out.println("Waiting");
+                                Socket newSocket = serverSocket.accept();
+                                SocketHandler socketHandler = new SocketHandler(self, newSocket);
+                                serverClients.add(socketHandler);
+                                new Thread(socketHandler).start();
+                                System.out.println("We have liftoff");
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
-                }
-            }).start();
+                }).start();
 
-        } catch (IOException e) {
-            e.printStackTrace();
+            } catch (IOException e) {
+                System.out.println("Port: " + serverPort + " is already in use.");
+                serverPort++;
+                continue;
+            }
+            System.out.println("Created server on port: " + serverPort);
+            return serverPort;
         }
     }
 
@@ -59,6 +65,7 @@ public class ConnectionController implements IConnection {
                     serverClients.add(socketHandler);
                     new Thread(socketHandler).start();
                 } catch (ConnectException e) {
+                    System.out.println("Error " + e.getMessage());
                 }
             }
 
