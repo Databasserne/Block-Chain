@@ -1,6 +1,8 @@
 package com.databasserne.model;
 
 import com.databasserne.controller.security.Sha3;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +11,7 @@ public class Node implements IBlock {
 
     private int id;
     private int nounce;
-    private List<String> data = new ArrayList<String>();
+    private String data;
     private String hash;
     private String previous;
 
@@ -29,11 +31,11 @@ public class Node implements IBlock {
         this.nounce = nounce;
     }
 
-    public List<String> getData() {
+    public String getData() {
         return data;
     }
 
-    public void setData(List<String> data) {
+    public void setData(String data) {
         this.data = data;
     }
 
@@ -53,13 +55,21 @@ public class Node implements IBlock {
         this.previous = previous;
     }
 
-    public void calculateHash(int id, int nounce, String previousHash, List<String> data) throws Exception {
-        StringBuilder sb = new StringBuilder();
-        for(String l : data) { sb.append(l); }
-        this.hash = Sha3.encode(String.valueOf(id) + String.valueOf(nounce) + previousHash + sb.toString());
+    public void calculateHash() throws Exception {
+        this.hash = Sha3.encode(String.valueOf(id) + String.valueOf(nounce) + previous + data);
     }
 
     public String mine() {
         return null;
+    }
+    
+    public JsonObject toJson() {
+        JsonObject obj = new JsonObject();
+        obj.addProperty("id", id);
+        obj.addProperty("nounce", nounce);
+        obj.addProperty("previousHash", previous);
+        obj.addProperty("data", data);
+        obj.addProperty("hash", hash);
+        return obj;
     }
 }

@@ -20,6 +20,7 @@ public class SocketHandler implements Runnable {
     public SocketHandler(ConnectionController connectionController, Socket socket) {
         this.connectionController = connectionController;
         this.socket = socket;
+        System.out.println("NONOO");
     }
 
     public void run() {
@@ -43,9 +44,7 @@ public class SocketHandler implements Runnable {
 
                 if (type.equals("query_latest")) {
                     JsonArray data = new JsonArray();
-                    JsonObject block1 = new JsonObject();
-                    block1.addProperty("hash", "VI HAR EN HASH");
-                    data.add(block1);
+                    data.add(com.databasserne.App.blocks.get(com.databasserne.App.blocks.size() -1 ).toJson());
                     JsonObject obj = new JsonObject();
                     obj.addProperty("type", "response_blockchain");
                     obj.add("data", data);
