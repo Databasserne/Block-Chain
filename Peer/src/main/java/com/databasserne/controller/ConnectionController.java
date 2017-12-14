@@ -48,9 +48,16 @@ public class ConnectionController implements IConnection {
         }
     }
 
-    public void connect() {
+    public void connect(List<String> peers) {
         try {
-            socket = new Socket("Machine name", serverPort);
+            for (String peer : peers) {
+                String[] peerData = peer.split(":");
+                socket = new Socket(peerData[0], Integer.parseInt(peerData[1]));
+                SocketHandler socketHandler = new SocketHandler(self, socket);
+                serverClients.add(socketHandler);
+                new Thread(socketHandler).start();
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -66,7 +73,9 @@ public class ConnectionController implements IConnection {
 
     }
 
-    public String write(String message) {
-        return null;
+    public void writeToAll(String message) throws IOException {
+        for (SocketHandler handler : serverClients) {
+            handler.write(message);
+        }
     }
 }

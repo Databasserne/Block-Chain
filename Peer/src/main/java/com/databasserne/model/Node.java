@@ -55,8 +55,8 @@ public class Node implements IBlock {
         this.previous = previous;
     }
 
-    public void calculateHash() throws Exception {
-        this.hash = Sha3.encode(String.valueOf(id) + String.valueOf(nounce) + previous + data);
+    public static String calculateHash(Node n) throws Exception {
+        return Sha3.encode(String.valueOf(n.getId()) + String.valueOf(n.getNounce()) + n.getPrevious() + n.getData());
     }
 
     public String mine() {
@@ -71,5 +71,39 @@ public class Node implements IBlock {
         obj.addProperty("data", data);
         obj.addProperty("hash", hash);
         return obj;
+    }
+
+    public static Node fromJson(JsonObject jsonObject) {
+        Node node = new Node();
+        node.id = jsonObject.get("id").getAsInt();
+        node.nounce = jsonObject.get("nounce").getAsInt();
+        node.previous = jsonObject.get("previousHash").getAsString();
+        node.data = jsonObject.get("data").getAsString();
+        node.hash = jsonObject.get("hash").getAsString();
+
+        return node;
+    }
+
+    public static Node getGenesisBlock() throws Exception {
+        Node initialBlock = new Node();
+        initialBlock.setId(1);
+        initialBlock.setData("my genesis block!!");
+        initialBlock.setPrevious("0");
+        initialBlock.setHash(Node.calculateHash(initialBlock));
+        return initialBlock;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Node node = (Node) o;
+
+        if (id != node.id) return false;
+        if (nounce != node.nounce) return false;
+        if (data != null ? !data.equals(node.data) : node.data != null) return false;
+        if (hash != null ? !hash.equals(node.hash) : node.hash != null) return false;
+        return previous != null ? previous.equals(node.previous) : node.previous == null;
     }
 }
