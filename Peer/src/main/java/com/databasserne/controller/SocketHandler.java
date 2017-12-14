@@ -1,5 +1,7 @@
 package com.databasserne.controller;
 
+import com.databasserne.App;
+import com.databasserne.model.Node;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
@@ -50,7 +52,14 @@ public class SocketHandler implements Runnable {
                     obj.add("data", data);
                     write(socket, gson.toJson(obj));
                 } else if (type.equals("query_all")) {
-
+                    JsonArray data = new JsonArray();
+                    for(Node n : App.blocks) {
+                        data.add(n.toJson());
+                    }
+                    JsonObject obj = new JsonObject();
+                    obj.addProperty("type", "response_blockchain");
+                    obj.add("data", data);
+                    write(socket, gson.toJson(obj));
                 } else if (type.equals("response_blockchain")) {
 
                 } else {
