@@ -1,9 +1,7 @@
 package com.databasserne.controller;
 
 import java.io.IOException;
-import java.net.ConnectException;
-import java.net.ServerSocket;
-import java.net.Socket;
+import java.net.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +21,7 @@ public class ConnectionController implements IConnection {
         this.serverClients = new ArrayList<SocketHandler>();
     }
 
-    public int serverStart() {
+    public int serverStart() throws UnknownHostException {
         while(true) {
             try {
                 serverSocket = new ServerSocket(serverPort);
@@ -39,6 +37,7 @@ public class ConnectionController implements IConnection {
                                 new Thread(socketHandler).start();
                                 System.out.println("We have liftoff");
                             } catch (IOException e) {
+                                System.out.println("IO: " + e.getMessage());
                                 e.printStackTrace();
                             }
                         }
@@ -50,28 +49,45 @@ public class ConnectionController implements IConnection {
                 serverPort++;
                 continue;
             }
-            System.out.println("Created server on port: " + serverPort);
+            System.out.println("Created server with ip: " + InetAddress.getLocalHost().getHostAddress() + " and on port: " + serverPort);
             return serverPort;
         }
     }
 
     public void connect(List<String> peers) {
         try {
+            System.out.println("Starting to connect.");
             for (String peer : peers) {
-                try {
-                    String[] peerData = peer.split(":");
-                    socket = new Socket(peerData[0], Integer.parseInt(peerData[1]));
-                    SocketHandler socketHandler = new SocketHandler(self, socket);
-                    serverClients.add(socketHandler);
-                    new Thread(socketHandler).start();
-                } catch (ConnectException e) {
-                    System.out.println("Error " + e.getMessage());
+                System.out.println("Found something to connect to: " + peer);
+                while(true) {
+                    try {
+                        String[] peerData = peer.split(":");
+                        socket = new Socket(peerData[0], Integer.parseInt(peerData[1]));
+                        System.out.println("Test");
+                        SocketHandler socketHandler = new SocketHandler(self, socket);
+                        System.out.println("Test2");
+                        serverClients.add(socketHandler);
+                        System.out.println("Test3");
+                        new Thread(socketHandler).start();
+                        System.out.println("Connection handler thread, created and started.");
+                    } catch (ConnectException e) {
+                        System.out.println("Error " + e.getMessage());
+                        e.printStackTrace();
+                        continue;
+                    }
+                    break;
                 }
+                System.out.println("Tester 1,2,3");
             }
 
         } catch (IOException e) {
+            System.out.println("IO: " + e.getMessage());
             e.printStackTrace();
+        } catch (Exception ex) {
+            System.out.println("Exception! " + ex.getMessage());
+            ex.printStackTrace();
         }
+        System.out.println("Done?");
     }
 
     public void closeConnection(SocketHandler socketHandler) {

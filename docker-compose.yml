@@ -2,5 +2,16 @@ version: '3'
 services:
    peer1:
       build: ./peer/
+      ports: 
+         - 6001:6001
+      environment:
+         - PEER_PORT=6001
    peer2:
       build: ./peer/
+      ports:
+         - 6002:6002
+      links:
+         - peer1
+      environment:
+         - PEERS=peer1:6001
+         - PEER_PORT=6002

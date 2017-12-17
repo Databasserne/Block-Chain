@@ -1,6 +1,5 @@
 package com.databasserne.controller;
 
-import com.databasserne.App;
 import com.databasserne.model.Node;
 import com.google.gson.*;
 
@@ -18,6 +17,7 @@ public class SocketHandler implements Runnable {
     private Socket socket;
 
     public SocketHandler(ConnectionController connectionController, Socket socket) {
+        System.out.println("Handler constructor started.");
         this.connectionController = connectionController;
         this.socket = socket;
     }

@@ -21,6 +21,8 @@ public class App
         try {
             new App().start();
         } catch (Exception ex) {
+            System.out.println("MAIN EXCEPTION: " + ex.getMessage());
+            ex.printStackTrace();
             Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -32,6 +34,7 @@ public class App
         /*if(System.getenv("PEER_PORT") != null) {
             port = Integer.parseInt(System.getenv("PEER_PORT"));
         }*/
+        if(System.getenv("PEER_PORT") != null) port = Integer.parseInt(System.getenv("PEER_PORT"));
         System.out.println(port);
         List<String> tmpArr = new ArrayList();
         /*if(System.getenv("PEERS") != null) {
@@ -44,12 +47,14 @@ public class App
         //tmpArr.add("localhost:3001");
         connectionController = new ConnectionController(port);
         int serverport = connectionController.serverStart();
-        for(int i = serverport; i >= port; i--) {
+        /*for(int i = serverport; i >= port; i--) {
             if(serverport == port) continue;
             tmpArr.add("peers:"+serverport);
+        }*/
+        if(System.getenv("PEERS") != null) {
+            tmpArr.add(System.getenv("PEERS"));
+            connectionController.connect(tmpArr);
         }
-        connectionController.connect(tmpArr);
-
 
         while(true) {}
     }
