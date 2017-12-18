@@ -36,7 +36,7 @@ public class SocketHandler implements Runnable {
                 while ((input = bf.readLine()) != null) {
                     String type = null;
                     JsonObject jsonObject = null;
-                    if(input.substring(0,1).equals("{")) {
+                    if (input.substring(0, 1).equals("{")) {
                         try {
                             jsonObject = parser.parse(input).getAsJsonObject();
                         } catch (JsonSyntaxException e) {
@@ -52,10 +52,10 @@ public class SocketHandler implements Runnable {
                         type = input;
                     }
 
-                    if(type.equals("query_peers")) {
+                    if (type.equals("query_peers")) {
                         StringBuilder sb = new StringBuilder();
                         for (SocketHandler p : connectionController.serverClients) {
-                            sb.append(p.socket.getInetAddress()+":"+p.socket.getPort());
+                            sb.append(p.socket.getInetAddress() + ":" + p.socket.getPort());
                         }
                         write(sb.toString());
                     } else if (type.equals("query_latest")) {
@@ -85,18 +85,22 @@ public class SocketHandler implements Runnable {
                     } else if (type.substring(0, 4).toLowerCase().equals("peer")) {
                         // This section is for user inputs.
                         String[] command = type.split(" ");
-                        if(command.length < 2) {
+                        if (command.length < 2) {
                             write("Command missing.");
                         } else {
                             if (command[1].toLowerCase().equals("add")) {
                                 Node n = new Node();
-                                n.setId(BlockchainController.getBlocks().get(BlockchainController.getBlockchainSize()-1).getId()+1);
+                                n.setId(BlockchainController.getBlocks().get(BlockchainController.getBlockchainSize() - 1).getId() + 1);
                                 n.setNounce(0);
-                                n.setPrevious(BlockchainController.getBlocks().get(BlockchainController.getBlockchainSize()-1).getHash());
+                                n.setPrevious(BlockchainController.getBlocks().get(BlockchainController.getBlockchainSize() - 1).getHash());
                                 if (command.length < 3 || command[2] == null || command[2].equals("")) {
                                     n.setData("");
                                 } else {
-                                    n.setData(command[2]);
+                                    StringBuilder sb = new StringBuilder();
+                                    for (int i = 2; i < command.length; i++) {
+                                        sb.append(command[i] + " ");
+                                    }
+                                    n.setData(sb.toString());
                                 }
                                 n.mine();
 
@@ -112,7 +116,42 @@ public class SocketHandler implements Runnable {
                                 connectionController.writeToAll(gson.toJson(obj));
 
                             } else if (command[1].toLowerCase().equals("mine")) {
-
+                                if (command.length < 3 || command[2] == null || command[2].equals("")) {
+                                    write("Missing command.");
+                                } else {
+                                    int id = -1;
+                                    try {
+                                        id = Integer.parseInt(command[2]);
+                                    } catch (NumberFormatException number) {
+                                        write("ID of block to mine, is needed.");
+                                    }
+                                    Node nodeToMine = null;
+                                    for (Node n : BlockchainController.getBlocks()) {
+                                        if (n.getId() == id) nodeToMine = n;
+                                    }
+                                    if (nodeToMine == null) write("Could not find block with that ID");
+                                    StringBuilder sb = new StringBuilder();
+                                    for (String cmd : command) {
+                                        sb.append(cmd + " ");
+                                    }
+                                    write("Choosing");
+                                    String[] data = sb.toString().split("\"");
+                                    for (String s : data) {
+                                        write("Data: " + s);
+                                    }
+                                    if (data[1].contains("-r") || data[2].contains("-r")) {
+                                        write("Recursive");
+                                        // Recursive mining.
+                                        if (!data[1].equals("-r")) nodeToMine.setData(data[1]);
+                                        if (!data[2].equals("-r")) nodeToMine.setData(data[2]);
+                                        nodeToMine.mine(0);
+                                    } else {
+                                        write("Not recursive");
+                                        nodeToMine.setNounce(0);
+                                        nodeToMine.setData(data[1]);
+                                        nodeToMine.mine();
+                                    }
+                                }
                             } else {
                                 write("No such command.");
                             }
@@ -124,7 +163,8 @@ public class SocketHandler implements Runnable {
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (NullPointerException nullPointer) {
-                connectionController.closeConnection(this);
+                nullPointer.printStackTrace();
+                //connectionController.closeConnection(this);
             } catch (Exception e) {
                 System.out.println("Exception: " + e.getMessage());
                 e.printStackTrace();
@@ -176,8 +216,11 @@ public class SocketHandler implements Runnable {
         socket.close();
     }
 
-    public void write(String message) throws IOException {
-         PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-         out.println(message);
+    public void write(String message) {
+        try {
+            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+            out.println(message);
+        } catch (IOException e) {
+        }
     }
 }

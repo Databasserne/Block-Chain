@@ -62,12 +62,23 @@ public class Node implements IBlock {
     public String mine() throws Exception {
         this.setNounce(0);
         String tmpHash = calculateHash(this);
+        System.out.println("Test -> " + tmpHash);
         while(!tmpHash.substring(0, 4).equals("0000")) {
             this.setNounce(this.getNounce()+1);
             tmpHash = calculateHash(this);
+            System.out.println("Hash: " + tmpHash);
         }
         this.setHash(tmpHash);
         return this.getHash();
+    }
+
+    public String mine(int nounce) throws Exception {
+        String tmpHash = calculateHash(this);
+        if(tmpHash.substring(0, 4).equals("0000")) {
+            this.setHash(tmpHash);
+            return this.getHash();
+        }
+        return mine(this.getNounce()+1);
     }
 
     public JsonObject toJson() {
@@ -84,7 +95,8 @@ public class Node implements IBlock {
         Node node = new Node();
         node.id = jsonObject.get("id").getAsInt();
         node.nounce = jsonObject.get("nounce").getAsInt();
-        node.previous = jsonObject.get("previousHash").getAsString();
+        if(jsonObject.get("previousHash") != null)
+            node.previous = jsonObject.get("previousHash").getAsString();
         node.data = jsonObject.get("data").getAsString();
         node.hash = jsonObject.get("hash").getAsString();
 
