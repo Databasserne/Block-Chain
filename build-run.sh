@@ -1,4 +1,4 @@
 cd ./Peer
 ./build.sh
 cd ..
-docker-compose up
+docker-compose up --build

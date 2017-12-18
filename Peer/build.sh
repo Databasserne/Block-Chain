@@ -1,8 +1,3 @@
-mvn clean package docker:build
-
-set +x
-docker login -u databasserne -p ultrapassword
-set -x
-
-docker push databasserne/block-chain
-docker logout
+mvn clean
+mvn package
+docker build -t peer .
