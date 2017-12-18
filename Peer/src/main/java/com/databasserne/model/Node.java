@@ -62,23 +62,24 @@ public class Node implements IBlock {
     public String mine() throws Exception {
         this.setNounce(0);
         String tmpHash = calculateHash(this);
-        System.out.println("Test -> " + tmpHash);
         while(!tmpHash.substring(0, 4).equals("0000")) {
             this.setNounce(this.getNounce()+1);
             tmpHash = calculateHash(this);
-            System.out.println("Hash: " + tmpHash);
         }
         this.setHash(tmpHash);
         return this.getHash();
     }
 
     public String mine(int nounce) throws Exception {
+        this.setNounce(nounce);
         String tmpHash = calculateHash(this);
-        if(tmpHash.substring(0, 4).equals("0000")) {
-            this.setHash(tmpHash);
-            return this.getHash();
+        while(!tmpHash.substring(0, 4).equals("0000")) {
+            this.setNounce(this.getNounce()+1);
+            tmpHash = calculateHash(this);
+            Thread.sleep(1);
         }
-        return mine(this.getNounce()+1);
+        this.setHash(tmpHash);
+        return this.getHash();
     }
 
     public JsonObject toJson() {

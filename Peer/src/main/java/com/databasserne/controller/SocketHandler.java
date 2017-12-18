@@ -143,13 +143,13 @@ public class SocketHandler implements Runnable {
                                         write("Recursive");
                                         // Recursive mining.
                                         if (!data[1].equals("-r")) nodeToMine.setData(data[1]);
-                                        if (!data[2].equals("-r")) nodeToMine.setData(data[2]);
-                                        nodeToMine.mine(0);
+                                        if (data.length >= 3 && !data[2].equals("-r")) nodeToMine.setData(data[2]);
+                                        System.out.println("Got HASH -> " + nodeToMine.mine(0));
                                     } else {
                                         write("Not recursive");
                                         nodeToMine.setNounce(0);
                                         nodeToMine.setData(data[1]);
-                                        nodeToMine.mine();
+                                        System.out.println("Got HASH -> " + nodeToMine.mine());
                                     }
                                 }
                             } else {
