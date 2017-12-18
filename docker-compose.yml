@@ -15,3 +15,21 @@ services:
       environment:
          - PEERS=peer1:6001
          - PEER_PORT=6002
+   peer3:
+      build: ./peer/
+      ports:
+         - 6003:6003
+      links:
+         - peer2
+      environment:
+         - PEERS=peer2:6002
+         - PEER_PORT=6003
+   peer4:
+      build: ./peer/
+      ports:
+         - 6004:6004
+      links:
+         - peer3
+      environment:
+         - PEERS=peer3:6003
+         - PEER_PORT=6004
