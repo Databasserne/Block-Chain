@@ -34,7 +34,6 @@ public class ConnectionController implements IConnection {
                                 SocketHandler socketHandler = new SocketHandler(self, newSocket);
                                 serverClients.add(socketHandler);
                                 new Thread(socketHandler).start();
-                                System.out.println("We have liftoff");
                             } catch (IOException e) {
                                 System.out.println("IO: " + e.getMessage());
                                 e.printStackTrace();
