@@ -78,9 +78,9 @@ peer mine <id> <{"data"}> <{-r}>
 ```
 As, when using the add command, the data field will be optional, and will be empty if not set.<br />
 For mining, there's an extra optional field <b>-r</b><br />
-This tells the system to use the recursive mining function.
+This tells the system to use the recursive mining function.<br/>
 <b>(Note: the recursive mining, isn't actually recursive since this will end in a stackoverflow exception for must people.<br />
-For know it will mine, the same way as the original mining, but will sleep, and therefore take more time.)</b>
+For now it will mine, the same way as the original mining, but will sleep, and therefore take more time.)</b>
 
 ## References
 [https://github.com/lhartikk/naivechain](https://github.com/lhartikk/naivechain)
