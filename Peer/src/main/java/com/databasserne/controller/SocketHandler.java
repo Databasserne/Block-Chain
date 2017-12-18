@@ -29,7 +29,7 @@ public class SocketHandler implements Runnable {
                 JsonObject reqPeers = new JsonObject();
                 reqPeers.addProperty("type", "query_peers");
                 write(gson.toJson(reqPeers));
-
+                
                 BufferedReader bf = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
                 String input;
@@ -123,8 +123,8 @@ public class SocketHandler implements Runnable {
                 }
             } catch (IOException e) {
                 e.printStackTrace();
-            } catch (NullPointerException nullPointer) {
-                connectionController.closeConnection(this);
+            } catch (NullPointerException e) {
+                e.printStackTrace();
             } catch (Exception e) {
                 System.out.println("Exception: " + e.getMessage());
                 e.printStackTrace();

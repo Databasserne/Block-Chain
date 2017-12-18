@@ -84,7 +84,8 @@ public class Node implements IBlock {
         Node node = new Node();
         node.id = jsonObject.get("id").getAsInt();
         node.nounce = jsonObject.get("nounce").getAsInt();
-        node.previous = jsonObject.get("previousHash").getAsString();
+        if(jsonObject.get("previousHash") != null)
+            node.previous = jsonObject.get("previousHash").getAsString();
         node.data = jsonObject.get("data").getAsString();
         node.hash = jsonObject.get("hash").getAsString();
 
