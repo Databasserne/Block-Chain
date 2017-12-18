@@ -9,11 +9,10 @@ public class ConnectionController implements IConnection {
 
     private ConnectionController self;
     private ServerSocket serverSocket;
-    private List<SocketHandler> serverClients;
     private Socket socket;
     private int serverPort;
-
     private List<String> peers = new ArrayList<String>();
+    public List<SocketHandler> serverClients;
 
     public ConnectionController(int serverPort) {
         this.self = this;
@@ -58,18 +57,14 @@ public class ConnectionController implements IConnection {
         try {
             System.out.println("Starting to connect.");
             for (String peer : peers) {
-                System.out.println("Found something to connect to: " + peer);
                 while(true) {
                     try {
                         String[] peerData = peer.split(":");
                         socket = new Socket(peerData[0], Integer.parseInt(peerData[1]));
-                        System.out.println("Test");
                         SocketHandler socketHandler = new SocketHandler(self, socket);
-                        System.out.println("Test2");
                         serverClients.add(socketHandler);
-                        System.out.println("Test3");
                         new Thread(socketHandler).start();
-                        System.out.println("Connection handler thread, created and started.");
+                        System.out.println("Connected to: " + peer);
                     } catch (ConnectException e) {
                         System.out.println("Error " + e.getMessage());
                         e.printStackTrace();
@@ -77,7 +72,6 @@ public class ConnectionController implements IConnection {
                     }
                     break;
                 }
-                System.out.println("Tester 1,2,3");
             }
 
         } catch (IOException e) {
@@ -87,7 +81,6 @@ public class ConnectionController implements IConnection {
             System.out.println("Exception! " + ex.getMessage());
             ex.printStackTrace();
         }
-        System.out.println("Done?");
     }
 
     public void closeConnection(SocketHandler socketHandler) {

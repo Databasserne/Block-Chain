@@ -11,31 +11,7 @@ public class BlockchainController {
 
     public BlockchainController() throws Exception {
         Node genesisBlock = Node.getGenesisBlock();
-
-        // Second
-        Node secondBlock = new Node();
-        secondBlock.setId(2);
-        secondBlock.setData("my genesis block!!");
-        secondBlock.setPrevious(genesisBlock.getHash());
-        secondBlock.setHash(Node.calculateHash(secondBlock));
-
-        // Third
-        Node third = new Node();
-        third.setId(3);
-        third.setData("my genesis block!!");
-        third.setPrevious(secondBlock.getHash());
-        third.setHash(Node.calculateHash(third));
-
-        // Fourth
-        Node fourth = new Node();
-        fourth.setId(4);
-        fourth.setData("my genesis block!!");
-        fourth.setPrevious(third.getHash());
-        fourth.setHash(Node.calculateHash(fourth));
         blocks.add(genesisBlock);
-        //blocks.add(secondBlock);
-        //blocks.add(third);
-        //blocks.add(fourth);
     }
 
     public static List<Node> getBlocks() {

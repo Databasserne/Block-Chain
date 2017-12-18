@@ -59,10 +59,17 @@ public class Node implements IBlock {
         return Sha3.encode(String.valueOf(n.getId()) + String.valueOf(n.getNounce()) + n.getPrevious() + n.getData());
     }
 
-    public String mine() {
-        return null;
+    public String mine() throws Exception {
+        this.setNounce(0);
+        String tmpHash = calculateHash(this);
+        while(!tmpHash.substring(0, 4).equals("0000")) {
+            this.setNounce(this.getNounce()+1);
+            tmpHash = calculateHash(this);
+        }
+        this.setHash(tmpHash);
+        return this.getHash();
     }
-    
+
     public JsonObject toJson() {
         JsonObject obj = new JsonObject();
         obj.addProperty("id", id);
@@ -87,9 +94,10 @@ public class Node implements IBlock {
     public static Node getGenesisBlock() throws Exception {
         Node initialBlock = new Node();
         initialBlock.setId(1);
+        initialBlock.setNounce(0);
         initialBlock.setData("my genesis block!!");
-        initialBlock.setPrevious("0");
-        initialBlock.setHash(Node.calculateHash(initialBlock));
+        initialBlock.setPrevious(null);
+        initialBlock.mine();
         return initialBlock;
     }
 

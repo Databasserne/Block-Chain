@@ -31,26 +31,11 @@ public class App
         blockchainController = new BlockchainController();
 
         int port = 6000;
-        /*if(System.getenv("PEER_PORT") != null) {
-            port = Integer.parseInt(System.getenv("PEER_PORT"));
-        }*/
         if(System.getenv("PEER_PORT") != null) port = Integer.parseInt(System.getenv("PEER_PORT"));
         System.out.println(port);
         List<String> tmpArr = new ArrayList();
-        /*if(System.getenv("PEERS") != null) {
-            String[] peersEnv = System.getenv("PEERS").split(",");
-            for(String peerEnv : peersEnv) {
-                tmpArr.add(peerEnv);
-                System.out.println("Test " + peerEnv);
-            }
-        }*/
-        //tmpArr.add("localhost:3001");
         connectionController = new ConnectionController(port);
         int serverport = connectionController.serverStart();
-        /*for(int i = serverport; i >= port; i--) {
-            if(serverport == port) continue;
-            tmpArr.add("peers:"+serverport);
-        }*/
         if(System.getenv("PEERS") != null) {
             tmpArr.add(System.getenv("PEERS"));
             connectionController.connect(tmpArr);
