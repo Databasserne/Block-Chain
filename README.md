@@ -1,23 +1,86 @@
 # Block-Chain
-##### Authors
+
+## Table of content
+1. [Introduction](#introduction)
+    1. [Authors](#authors)
+    2. [Requirements](#requirements)
+    3. [Overview](#overview)
+2. [Run program](#run-program)
+    1. [Quickstart](#quickstart)
+    2. [Connect](#connect)
+    3. [Commands](#commands)
+        1. [Add block](#add-block)
+        2. [Mining](#mine-block)
+3. [References](#references)
+
+## Introduction
+This blockchain is working in a P2P network and is made in Java.<br/>
+It uses docker services and as default there's created 4 peers.
+
+### Authors
 * Jonas Simonsen
 * Kasper Worm
 * Alexander Steen
 * Martin Karlsen
 
-## Table of content
-1. [Introduction](#introduction)
-2. [Run program](#run-program)
-3. [How to use](#how-to-use)
-4. [References](#references)
+### Requirements
+To use this you will need the following:
+* Docker
+* Maven
 
-## Introduction
+### Overview
+The docker-compose file will from default, create 4 peers.
+Each peer will have its own ip address and have been attached a port:
+* Peer1: 6001
+* Peer2: 6002
+* Peer3: 6003
+* Peer4: 6004
 
 ## Run program
+
+### Quickstart
+To quickly setup and run the system, go to the root folder and use the following:
 ```
-Docker-compose up
+./build-run.sh
+```
+This will start the build.sh file in the Peer, which will run the necessary maven commands.<br/>
+The build-run file will also run the docker-compose which will set start the environment.
+
+### Connect
+When the system has been started, you are able to connect to the peers.<br />
+You'll do that, using telnet.<br />
+First thing you need to do is to find your docker ip.<br />
+You can do that by typing
+```
+docker-machine ip
+```
+and copy the ip address.<br />
+<br/>
+For connecting using tellnet, write:
+```
+telnet <docker-ip-address> <port>
 ```
 
-## How to use
+### Commands
+While connected to the single Peer, you can type some commands.
+
+#### Add block
+To add a block you will simply have to write:
+```
+peer add <{"data"}>
+```
+The data field is optional and will create a block with empty data.
+
+#### Mine block
+To mine a block, type:
+```
+peer mine <id> <{"data"}> <{-r}>
+```
+As, when using the add command, the data field will be optional, and will be empty if not set.<br />
+For mining, there's an extra optional field <b>-r</b><br />
+This tells the system to use the recursive mining function.
+<b>(Note: the recursive mining, isn't actually recursive since this will end in a stackoverflow exception for must people.<br />
+For know it will mine, the same way as the original mining, but will sleep, and therefore take more time.)</b>
 
 ## References
+[https://github.com/lhartikk/naivechain](https://github.com/lhartikk/naivechain)
