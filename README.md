@@ -74,7 +74,7 @@ The data field is optional and will create a block with empty data.
 #### Mine block
 To mine a block, type:
 ```
-peer mine <id> <{"data"}> <{-r}>
+peer mine <id> "<{"data"}>" <{-r}>
 ```
 As, when using the add command, the data field will be optional, and will be empty if not set.<br />
 For mining, there's an extra optional field <b>-r</b><br />
