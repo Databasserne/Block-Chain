@@ -27,6 +27,7 @@ It uses docker services and as default there's created 4 peers.
 To use this you will need the following:
 * Docker
 * Maven
+* Telnet
 
 ### Overview
 The docker-compose file will from default, create 4 peers.
@@ -45,6 +46,14 @@ To quickly setup and run the system, go to the root folder and use the following
 ```
 This will start the build.sh file in the Peer, which will run the necessary maven commands.<br/>
 The build-run file will also run the docker-compose which will set start the environment.
+
+To run the test files, type the following:
+```
+./TestData.sh
+```
+```
+./TestMine.sh
+```
 
 ### Connect
 When the system has been started, you are able to connect to the peers.<br />
