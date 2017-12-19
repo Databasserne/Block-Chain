@@ -11,7 +11,8 @@
     3. [Commands](#commands)
         1. [Add block](#add-block)
         2. [Mining](#mine-block)
-3. [References](#references)
+3. [Demonstraton](#demonstration)
+4. [References](#references)
 
 ## Introduction
 This blockchain is working in a P2P network and is made in Java.<br/>
@@ -91,6 +92,22 @@ For mining, there's an extra optional field <b>-r</b><br />
 This tells the system to use the recursive mining function.<br/>
 <b>(Note: the recursive mining, isn't actually recursive since this will end in a stackoverflow exception for must people.<br />
 For now it will mine, the same way as the original mining, but will sleep, and therefore take more time.)</b>
+
+## Demonstration
+<b>Build and run</b>
+![Build Run](https://github.com/Databasserne/Block-Chain/blob/master/Build-Run.png)
+
+<b>Peer Add Docker</b>
+![Peer Add Docker](https://github.com/Databasserne/Block-Chain/blob/master/Peer%20Add%20Docker.png)
+
+<b>Peer Add Telnet</b>
+![Peer Add Telnet](https://github.com/Databasserne/Block-Chain/blob/master/Peer%20Add%20Telnet.png)
+
+<b>Peer Mine Docker</b>
+![Peer Mine Docker](https://github.com/Databasserne/Block-Chain/blob/master/Peer%20Mine%20Docker.png)
+
+<b>Peer Mine Telnet</b>
+![Peer Mine Telnet](https://github.com/Databasserne/Block-Chain/blob/master/Peer%20Mine%20Telnet.png)
 
 ## References
 [https://github.com/lhartikk/naivechain](https://github.com/lhartikk/naivechain)
