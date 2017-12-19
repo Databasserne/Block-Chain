@@ -64,6 +64,7 @@ You can do that by typing
 docker-machine ip
 ```
 and copy the ip address.<br />
+<b>(Note: this is only needed on windows machines, since localhost wont work. For linux and mac, the default setting will work.)</b>
 <br/>
 For connecting using tellnet, write:
 ```
