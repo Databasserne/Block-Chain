@@ -106,7 +106,7 @@ For now it will mine, the same way as the original mining, but will sleep, and t
 <b>Peer Mine Docker</b>
 ![Peer Mine Docker](https://github.com/Databasserne/Block-Chain/blob/master/Peer%20Mine%20Docker.png)
 
-<b>Peer Mine Telnet</b>
+<b>Peer Mine Telnet</b><br/>
 ![Peer Mine Telnet](https://github.com/Databasserne/Block-Chain/blob/master/Peer%20Mine%20Telnet.png)
 
 ## References
